@@ -3,7 +3,6 @@ package jwin;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import jwin.pojo.SomeInput;
-import jwin.pojo.SomeValue;
 import jwin.service.ExpensiveService;
 import org.boon.json.JsonFactory;
 import org.boon.json.ObjectMapper;
@@ -19,7 +18,7 @@ public class MyCache {
 
     private static MyCache ourInstance = new MyCache();
 
-    private final Cache<String, SomeValue> cache;
+    private final Cache<String, SomeInput> cache;
     private final ExpensiveService expensiveService;
 
     public static MyCache getInstance() {
@@ -30,7 +29,7 @@ public class MyCache {
         expensiveService = new ExpensiveService();
         cache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
-                .expireAfterWrite(60, SECONDS)
+                .expireAfterWrite(20, SECONDS)
                 .recordStats()
 //                .maximumWeight(10000)
 //                .weigher(new Weigher<SomeInput, SomeValue>() {
@@ -45,14 +44,14 @@ public class MyCache {
                 .build();
     }
 
-    public SomeValue get(final SomeInput input) throws ExecutionException {
+    public SomeInput get(final SomeInput input) throws ExecutionException {
 
         ObjectMapper mapper = JsonFactory.create();
         final String json = mapper.toJson(input);
 
-        return cache.get(json, new Callable<SomeValue>() {
+        return cache.get(json, new Callable<SomeInput>() {
             @Override
-            public SomeValue call() throws InterruptedException {
+            public SomeInput call() throws InterruptedException {
                 System.out.println("Cache write, key: " + json);
                 return expensiveService.expensiveComputation(input);
             }

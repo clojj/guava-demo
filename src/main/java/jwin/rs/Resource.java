@@ -1,9 +1,7 @@
 package jwin.rs;
 
-import com.google.common.cache.CacheStats;
 import jwin.MyCache;
 import jwin.pojo.SomeInput;
-import jwin.pojo.SomeValue;
 import jwin.service.ExpensiveService;
 import org.boon.json.JsonFactory;
 import org.boon.json.ObjectMapper;
@@ -28,9 +26,13 @@ public class Resource {
     @Path("input")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public SomeValue test(SomeInput input) throws InterruptedException, ExecutionException {
+    public SomeInput test(SomeInput input) throws InterruptedException, ExecutionException {
         MyCache cache = MyCache.getInstance();
-        return cache.get(input);
+        SomeInput output = cache.get(input);
+        if (!output.equals(input)) {
+            throw new RuntimeException("invalid value");
+        }
+        return output;
     }
 
     @GET

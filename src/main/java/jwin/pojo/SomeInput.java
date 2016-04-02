@@ -8,6 +8,15 @@ public class SomeInput {
     private Command cmd;
     private Input input;
 
+    public SomeInput() {
+    }
+
+    public SomeInput(String id, Command cmd, Input input) {
+        this.id = id;
+        this.cmd = cmd;
+        this.input = input;
+    }
+
     public String getId() {
         return id;
     }
