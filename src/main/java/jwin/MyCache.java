@@ -2,7 +2,6 @@ package jwin;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheStats;
 import jwin.pojo.SomeInput;
 import jwin.pojo.SomeValue;
 import jwin.service.ExpensiveService;
@@ -31,7 +30,7 @@ public class MyCache {
         expensiveService = new ExpensiveService();
         cache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
-                .expireAfterWrite(10, SECONDS)
+                .expireAfterWrite(60, SECONDS)
                 .recordStats()
 //                .maximumWeight(10000)
 //                .weigher(new Weigher<SomeInput, SomeValue>() {
@@ -61,7 +60,6 @@ public class MyCache {
     }
 
     public String getStats() {
-        System.out.println("SIZE: " + cache.size());
         return cache.stats().toString() + " size: " + cache.size();
     }
 }
