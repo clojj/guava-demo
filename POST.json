@@ -1,0 +1,9 @@
+{
+  "id": "42",
+  "cmd": {
+    "command": "somecommand"
+  },
+  "input": {
+    "input": "someinput"
+  }
+}
