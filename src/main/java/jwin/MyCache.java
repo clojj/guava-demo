@@ -22,7 +22,7 @@ public class MyCache {
 
     private static MyCache ourInstance = new MyCache();
 
-    private Cache<String, SomeInput> cache;
+    private volatile Cache<String, SomeInput> cache;
 
     private final ConfigProcessor configProcessor;
 
