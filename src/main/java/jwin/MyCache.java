@@ -3,11 +3,15 @@ package jwin;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import jwin.pojo.SomeInput;
+import jwin.reconfigure.ConfigProcessor;
+import jwin.rs.CacheConfig;
 import jwin.service.ExpensiveService;
 import org.boon.json.JsonFactory;
 import org.boon.json.ObjectMapper;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -18,15 +22,23 @@ public class MyCache {
 
     private static MyCache ourInstance = new MyCache();
 
-    private final Cache<String, SomeInput> cache;
+    private Cache<String, SomeInput> cache;
+
+    private final ConfigProcessor configProcessor;
+
     private final ExpensiveService expensiveService;
+
 
     public static MyCache getInstance() {
         return ourInstance;
     }
 
     private MyCache() {
+
         expensiveService = new ExpensiveService();
+
+        configProcessor = new ConfigProcessor();
+
         cache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
                 .expireAfterWrite(20, SECONDS)
@@ -60,5 +72,14 @@ public class MyCache {
 
     public String getStats() {
         return cache.stats().toString() + " size: " + cache.size();
+    }
+
+    public String configure(CacheConfig config) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
+        List<List<String>> configurations = config.getConfigurations();
+        CacheBuilder newBuilder = configProcessor.configure(configurations, cacheBuilder);
+        Cache newCache = newBuilder.build();
+        cache = newCache;
+        return "Success";
     }
 }

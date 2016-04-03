@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 public class ExpensiveService {
 
     public SomeInput expensiveComputation(SomeInput input) throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(500);
         return new SomeInput(input.getId(), input.getCmd(), input.getInput());
     }
 }

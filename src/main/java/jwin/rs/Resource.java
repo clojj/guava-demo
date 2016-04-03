@@ -9,6 +9,7 @@ import org.boon.json.ObjectMapper;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -33,6 +34,14 @@ public class Resource {
             throw new RuntimeException("invalid value");
         }
         return output;
+    }
+
+    @POST
+    @Path("configure")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String config(CacheConfig config) throws InterruptedException, ExecutionException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return MyCache.getInstance().configure(config);
     }
 
     @GET
