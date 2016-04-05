@@ -1,7 +1,6 @@
 package jwin;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.*;
 import jwin.pojo.SomeInput;
 import jwin.reconfigure.ConfigProcessor;
 import jwin.rs.CacheConfig;
@@ -43,6 +42,17 @@ public class MyCache {
         cache = CacheBuilder.newBuilder()
                 .maximumSize(2000)
                 .expireAfterAccess(30, SECONDS)
+                .softValues()
+                .removalListener(new RemovalListener<String, SomeInput>() {
+                    @Override
+                    public void onRemoval(RemovalNotification<String, SomeInput> removalNotification) {
+                        if (removalNotification.wasEvicted()) {
+                            if (RemovalCause.COLLECTED.equals(removalNotification.getCause())) {
+                                System.out.println("removalNotification.getCause().name() = " + removalNotification.getCause().name());
+                            }
+                        }
+                    }
+                })
                 .recordStats()
 //                .maximumWeight(10000)
 //                .weigher(new Weigher<SomeInput, SomeValue>() {
