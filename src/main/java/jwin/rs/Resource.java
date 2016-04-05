@@ -48,8 +48,21 @@ public class Resource {
     @Path("stats")
     @Produces(MediaType.TEXT_PLAIN)
     public String test() {
-        MyCache cache = MyCache.getInstance();
-        return cache.getStats();
+        return MyCache.getInstance().getStats();
+    }
+
+    @GET
+    @Path("sizeof")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String sizeOf() {
+        return MyCache.getInstance().getSizeOf();
+    }
+
+    @GET
+    @Path("cleanup")
+    @Produces(MediaType.TEXT_PLAIN)
+    public void cleanUp() {
+        MyCache.getInstance().cleanUp();
     }
 
 }

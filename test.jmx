@@ -17,7 +17,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.num_threads">5</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1459630133000</longProp>
         <longProp name="ThreadGroup.end_time">1459632364000</longProp>
@@ -86,7 +86,7 @@
           <hashTree/>
         </hashTree>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable" enabled="true">
-          <stringProp name="maximumValue">1000</stringProp>
+          <stringProp name="maximumValue">300</stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="outputFormat">USER_000</stringProp>
           <boolProp name="perThread">true</boolProp>
@@ -125,6 +125,7 @@
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
+          <stringProp name="RespTimeGraph.interval">5000</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

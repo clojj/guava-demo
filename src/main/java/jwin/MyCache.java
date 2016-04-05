@@ -8,9 +8,9 @@ import jwin.rs.CacheConfig;
 import jwin.service.ExpensiveService;
 import org.boon.json.JsonFactory;
 import org.boon.json.ObjectMapper;
+import org.openjdk.jol.info.GraphLayout;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -27,6 +27,7 @@ public class MyCache {
     private final ConfigProcessor configProcessor;
 
     private final ExpensiveService expensiveService;
+    private String sizeOf;
 
 
     public static MyCache getInstance() {
@@ -40,8 +41,8 @@ public class MyCache {
         configProcessor = new ConfigProcessor();
 
         cache = CacheBuilder.newBuilder()
-                .maximumSize(1000)
-                .expireAfterWrite(20, SECONDS)
+                .maximumSize(2000)
+                .expireAfterAccess(30, SECONDS)
                 .recordStats()
 //                .maximumWeight(10000)
 //                .weigher(new Weigher<SomeInput, SomeValue>() {
@@ -74,12 +75,21 @@ public class MyCache {
         return cache.stats().toString() + " size: " + cache.size();
     }
 
-    public String configure(CacheConfig config) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void cleanUp() {
+        cache.invalidateAll();
+        cache.cleanUp();
+    }
+
+    public String configure(CacheConfig config) {
         CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
         List<List<String>> configurations = config.getConfigurations();
         CacheBuilder newBuilder = configProcessor.configure(configurations, cacheBuilder);
         Cache newCache = newBuilder.build();
         cache = newCache;
         return "Success";
+    }
+
+    public String getSizeOf() {
+        return GraphLayout.parseInstance(cache.asMap().entrySet()).toFootprint();
     }
 }
