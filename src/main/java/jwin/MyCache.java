@@ -26,7 +26,6 @@ public class MyCache {
     private final ConfigProcessor configProcessor;
 
     private final ExpensiveService expensiveService;
-    private String sizeOf;
 
 
     public static MyCache getInstance() {
